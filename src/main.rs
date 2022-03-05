@@ -2,6 +2,7 @@ pub mod cli;
 pub mod commands;
 pub mod config;
 pub mod filesystem;
+pub mod interactive;
 
 use clap::Parser;
 use log::LevelFilter;
