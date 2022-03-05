@@ -7,10 +7,13 @@ license = "MIT OR Apache-2.0"
 readme = "README.md"
 description = ""
 
-
 [dependencies]
 clap = { version = "3", default-features = false, features = ["derive", "std"] }
+configit = "0.3"
+log = "0.4"
 rdev = "0.5"
+serde = { version = "1", features = ["derive"] }
+simplelog = "0.11"
 
 [profile.release]
 opt-level = 3

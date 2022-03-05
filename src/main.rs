@@ -1,16 +1,26 @@
-use rdev::{listen, Event, EventType};
+pub mod cli;
+pub mod commands;
+pub mod config;
+pub mod filesystem;
 
-fn callback(event: Event) {
-    let Event { event_type, .. } = event;
+use clap::Parser;
+use log::LevelFilter;
+use simplelog::{ColorChoice, TermLogger, TerminalMode};
 
-    match event_type {
-        EventType::KeyPress(key) => println!("press key: {key:?}"),
-        _ => (),
-    }
-}
+use crate::cli::{Cli, SubCommands};
 
 pub fn main() {
-    if let Err(error) = listen(callback) {
-        println!("Error: {:?}", error)
-    }
+    initialize_logger(LevelFilter::Debug);
+
+    let Cli { subcommand } = Cli::parse();
+
+    match subcommand {
+        SubCommands::Init => crate::commands::initialize(),
+        SubCommands::Status => crate::commands::status(),
+        SubCommands::Listen => crate::commands::listen(),
+    };
+}
+
+fn initialize_logger(level: LevelFilter) {
+    TermLogger::init(level, Default::default(), TerminalMode::Mixed, ColorChoice::Auto).unwrap();
 }
