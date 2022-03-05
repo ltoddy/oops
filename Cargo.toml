@@ -11,8 +11,10 @@ description = ""
 clap = { version = "3", default-features = false, features = ["derive", "std"] }
 configit = "0.3"
 log = "0.4"
+parking_lot = "0.12"
 rdev = "0.5"
 serde = { version = "1", features = ["derive"] }
+serde_json = "1"
 simplelog = "0.11"
 
 [profile.release]

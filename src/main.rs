@@ -1,5 +1,6 @@
 pub mod cli;
 pub mod commands;
+pub mod common;
 pub mod config;
 pub mod filesystem;
 pub mod interactive;

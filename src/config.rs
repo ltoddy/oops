@@ -8,6 +8,7 @@ use crate::filesystem;
 pub struct Config {
     pid: PathBuf,
     log: PathBuf,
+    socket: PathBuf,
 }
 
 impl Default for Config {
@@ -17,8 +18,9 @@ impl Default for Config {
 
         let pid = config_dir.join("oops.pid");
         let log = local_dir.join("oops.log");
+        let socket = config_dir.join("oops.sock");
 
-        Config { pid, log }
+        Config { pid, log, socket }
     }
 }
 
