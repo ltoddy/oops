@@ -25,3 +25,10 @@ oops listen
 ```shell
 oops status
 ```
+
+
+#### TODO
+
+[] 添加守护进程,后台执行
+[] server自动重启
+[] 美化输出

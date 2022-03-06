@@ -14,7 +14,7 @@ pub fn oops_dir() -> PathBuf {
 
 pub fn drop_socket_file<P: AsRef<Path>>(filename: P) -> io::Result<()> {
     let filename = filename.as_ref();
-    if filename.is_file() {
+    if filename.exists() {
         fs::remove_file(filename)?;
     }
     Ok(())
