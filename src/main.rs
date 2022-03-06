@@ -7,23 +7,22 @@ pub mod server;
 
 use std::fs::OpenOptions;
 
+use anyhow::Result;
 use clap::Parser;
-use log::{error, LevelFilter};
+use log::{LevelFilter};
 use simplelog::{ColorChoice, CombinedLogger, Config, TermLogger, TerminalMode, WriteLogger};
 
 use crate::cli::{Cli, SubCommands};
 use crate::filesystem::oops_dir;
 
-pub fn main() {
+pub fn main() -> Result<()> {
     initialize_logger();
 
     let Cli { subcommand } = Cli::parse();
 
-    if let Err(err) = match subcommand {
+    match subcommand {
         SubCommands::Status => crate::commands::status(),
         SubCommands::Listen => crate::commands::listen(),
-    } {
-        error!("{err}")
     }
 }
 

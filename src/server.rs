@@ -13,18 +13,18 @@ use crate::filesystem;
 
 // For inter-process communication
 pub struct Listener {
-    socket_path: PathBuf,
     statistics: Mutex<Statistics>,
     inner: UnixListener,
 }
 
 impl Listener {
     pub fn bind(socket_path: PathBuf) -> Result<Self> {
+        filesystem::drop_socket_file(&socket_path)?;
         let statistics = Mutex::new(Statistics::default());
         let listener = UnixListener::bind(&socket_path)
             .with_context(|| "Failed to bind unix socket listener.")?;
 
-        Ok(Listener { socket_path, statistics, inner: listener })
+        Ok(Listener { statistics, inner: listener })
     }
 
     pub fn on_keyboard_press(self: &mut Arc<Self>, event: Event) {
@@ -46,11 +46,5 @@ impl Listener {
                 error!("Failed to send statistics: {err}");
             }
         }
-    }
-}
-
-impl Drop for Listener {
-    fn drop(&mut self) {
-        let _ = filesystem::drop_socket_file(&self.socket_path);
     }
 }
