@@ -1,4 +1,6 @@
-use std::path::PathBuf;
+use std::fs;
+use std::io;
+use std::path::{Path, PathBuf};
 
 #[inline]
 pub fn home_dir() -> PathBuf {
@@ -6,11 +8,14 @@ pub fn home_dir() -> PathBuf {
 }
 
 #[inline]
-pub fn config_dir() -> PathBuf {
-    home_dir().join(".config")
+pub fn oops_dir() -> PathBuf {
+    home_dir().join(".oops")
 }
 
-#[inline]
-pub fn local_dir() -> PathBuf {
-    home_dir().join(".local")
+pub fn drop_socket_file<P: AsRef<Path>>(filename: P) -> io::Result<()> {
+    let filename = filename.as_ref();
+    if filename.is_file() {
+        fs::remove_file(filename)?;
+    }
+    Ok(())
 }

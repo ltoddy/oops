@@ -11,5 +11,4 @@ pub struct Cli {
 pub enum SubCommands {
     Listen,
     Status,
-    Init,
 }

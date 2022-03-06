@@ -1,13 +1,23 @@
 use std::io::{BufReader, Read};
 use std::os::unix::net::UnixStream;
 
-use crate::common::SOCKET_PATH;
+use anyhow::{Context, Result};
 
-pub fn status() {
-    let socket = UnixStream::connect(SOCKET_PATH).unwrap();
+use crate::common::Statistics;
+use crate::filesystem;
+
+pub fn status() -> Result<()> {
+    let oops_dir = filesystem::oops_dir();
+    let socket_path = oops_dir.join("oops.sock");
+
+    let socket = UnixStream::connect(socket_path).with_context(|| {
+        "Can't connect oops, make sure the `oops listen` command is executed before this."
+    })?;
+    let mut reader = BufReader::new(socket);
     let mut buffer = Vec::<u8>::with_capacity(1024);
 
-    let mut reader = BufReader::new(socket);
-    let _ = reader.read_to_end(&mut buffer);
-    println!("{}", String::from_utf8_lossy(&buffer));
+    reader.read_to_end(&mut buffer).with_context(|| "Failed to read, please try again.");
+    let statistics = Statistics::from_bytes(&buffer);
+    println!("{statistics:?}");
+    Ok(())
 }
